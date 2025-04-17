@@ -21,12 +21,14 @@ This project analyzes a dataset containing detailed information on San Francisco
 
 ```
 project/
-├── app.py                      # Main Streamlit application
+├── app.py                     
 ├── Data/
-│   └── SF Salaries.csv         # Dataset used in the app
+│   ├── SF Salaries.csv 
+│   └──Salaries.csv          
 ├── Report/
-│   ├── Report ... .pdata       # (Optional) Downloadable report files
-└── README.md                   # This file
+│   ├── Salaries_Analysis_Report_EN.pdf 
+│   └── Salaries_Analysis_Report_AR.pdf
+└── README.md                   
 ```
 
 ## 🛠️ Requirements
