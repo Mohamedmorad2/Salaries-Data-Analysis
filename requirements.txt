@@ -1,4 +1,8 @@
 streamlit
 pandas
 plotly 
+<<<<<<< HEAD
 pillow
+=======
+pillow
+>>>>>>> 94f11dcadbb41d6f019336a63c0eabe8e167b8ac
