@@ -24,7 +24,9 @@ project/
 ├── app.py                     
 ├── Data/
 │   ├── SF Salaries.csv 
-│   └──Salaries.csv          
+│   └──Salaries.csv 
+├── Noteboke/
+│   └──Salaries_Data_Analysis.ipynb
 ├── Report/
 │   ├── Salaries_Analysis_Report_EN.pdf 
 │   └── Salaries_Analysis_Report_AR.pdf
