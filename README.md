@@ -1,27 +1,69 @@
-summarize the insights from the Salaries dataset:
-- Salary Distribution:
-    - The dataset contains information about salaries for various job positions within the San Francisco city government.
-    - The salary distribution is skewed, with a majority of employees earning moderate to high salaries.
-    - Some positions, such as "Transit Operator" and "Police Officer," have a wide range of salaries.
-- Top Earning Positions:
-    - The highest-paid positions include "General Manager-Metropolitan Transit Authority," "Chief Investment Officer," and "Chief of Police."
-    - These roles typically require significant expertise and responsibility.
-- Gender Disparities:
-    - There is a gender disparity in salaries, with male employees generally earning more than female employees.
-    - Efforts should be made to address this gap and promote pay equity.
-- Overtime Pay:
-    - Some employees receive substantial overtime pay, especially in roles like "Firefighter" and "Police Officer."
-    - Managing overtime costs while ensuring public safety is crucial.
-- Job Titles and Departments:
-    - The dataset includes a wide variety of job titles across different departments.
-    - Departments like "Police," "Fire," and "Public Health" have the highest number of employees.
-- Experience and Salaries:
-    - Salaries tend to increase with years of experience.
-    - Employees with longer tenure often occupy higher-paying positions.
-- Benefits and Perks:
-    - Beyond base salaries, benefits (such as health insurance, retirement plans, and vacation days) contribute significantly to total compensation.
-    - Analyzing benefits alongside salaries provides a holistic view of employee compensation.
-- Outliers and Anomalies:
-    - Some extreme salary values may be outliers due to bonuses, promotions, or other factors.
-    - Identifying and investigating these anomalies is essential for accurate analysis.
-In conclusion, the Salaries dataset offers valuable insights into the city's workforce, compensation structures, and potential areas for improvement. Researchers, policymakers, and HR professionals can use this data to make informed decisions and enhance employee satisfaction and fairness. 
+# 📊 Salaries Analysis Report
+
+
+![Image Description](Image/pexels-pixabay.jpg)
+This project analyzes a dataset containing detailed information on San Francisco city government employee compensation—covering job titles, departments, base salaries, overtime, and benefits. The analysis reveals trends such as skewed salary distributions.
+
+
+
+## 🚀 Features
+
+- Load and view salary data from a CSV file
+- Analyze number of employees per year
+- Compare mean and median of salaries over the years
+- Visualize highest paid employees and job titles
+- Filter jobs with salaries over $250,000
+- Explore police officers' count and salary stats
+- Choose report language (English / Arabic)
+- Interactive charts with **Plotly**
+
+## 🗂️ Project Structure
+
+```
+project/
+├── app.py                      # Main Streamlit application
+├── Data/
+│   └── SF Salaries.csv         # Dataset used in the app
+├── Report/
+│   ├── Report ... .pdata       # (Optional) Downloadable report files
+└── README.md                   # This file
+```
+
+## 🛠️ Requirements
+
+Install dependencies using pip:
+
+```bash
+pip install streamlit pandas plotly pillow
+```
+
+## ▶️ Run the App
+
+In your terminal, navigate to the project directory and run:
+
+```bash
+streamlit run app.py
+```
+
+This will launch the app in your browser at `http://localhost:8501`.
+
+## 📁 Data Source
+
+The data used in this dashboard is from a file named `SF Salaries.csv`, located inside the `Data/` folder.
+
+Make sure this file exists before running the app.
+
+## 🧠 Insights Provided
+
+1. Employee counts per year (2011–2014)
+2. Trends in total pay and benefits
+3. Most frequent job titles
+4. Top 10 highest paying job titles
+5. Job titles with salaries exceeding $250K
+6. Salary analysis of Police Officers by rank
+7. Visuals using Plotly for easy understanding
+
+## 📌 Notes
+
+- Employee names in the dataset are anonymized for privacy.
+- The data is sourced from the City and County of San Francisco's Open Data Portal.

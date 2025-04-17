@@ -1,4 +1,8 @@
 import streamlit as st
+import pandas as pd
+from PIL import Image
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Set the page configuration
 st.set_page_config(page_title="Salaries Analysis Report", layout="wide", page_icon="📊")
@@ -36,177 +40,308 @@ st.markdown(
 st.title("Salaries Analysis Report 📊")
 
 
+st.image("Image/pexels-pixabay.jpg", width=700)
+col1, col2 = st.columns(2)
+
+with col1:
+    # Select Language
+    lang = st.selectbox("Choose Language For Report", ["English", "Arabic"])
+
+    # Create a sub-row containing two columns for the buttons
+    btn_col1, btn_col2 = st.columns(2)
+
+    if lang == "English":
+        with open("Report/Salaries_Analysis_Report_EN.pdf", "rb") as file:
+            report_data = file.read()
+        btn_col1.download_button(
+            label="Download Report",
+            data=report_data,
+            file_name="Salaries_Analysis_Report_EN.pdf",
+            mime="application/pdata"
+        )
+    else:
+        with open("Report/Salaries_Analysis_Report_AR.pdf", "rb") as file:
+            report_data = file.read()
+        btn_col1.download_button(
+            label="Download Report",
+            data=report_data,
+            file_name="Salaries_Analysis_Report_AR.pdf",
+            mime="application/pdata"
+        )
+
+with col2:
+    pass
+
+
+# Load data from Excel and display it
+data = pd.read_csv('./Data/SF Salaries.csv')
+
+st.title('Salaries Analysis Data')
+st.dataframe(data)
+
 # Section: Analytical Questions for Salaries Analysis
 st.header("Analytical Questions for Salaries Analysis")
 
-# 1. Best-selling Category
-st.subheader("1. Best-selling Category")
+
+# 1. Number of Employees Per Year
+st.subheader("1. Number of Employees Per Year")
 st.markdown(
     """
-    **Which category is the best-selling in terms of quantity?**  
-    <div class="answer">
-    - <strong>Best-selling category by vale:</strong> Women’s Wear  <br>
-    - <strong>Total Quantity:</strong> 678 
-    </div>
+    <div class="answer">    
+    What is the number of employees for each year? Is the number increasing or decreasing?
+    </div> 
     """, unsafe_allow_html=True)
-
-
-
-# 2. Highest Revenue Region
-st.subheader("2. Highest Revenue Region")
-st.markdown(
-    """
-    **Which region achieved the highest revenue?**  
-    <div class="answer">
-    - <strong>Region with highest total sales:</strong> Mansoura  <br>
-    - <strong>Total Sales:</strong> 64,890.15 EGP
-    </div>
-    """, unsafe_allow_html=True)
-
-
-
-# 3. Month with Highest Sales
-st.subheader("3. Month with Highest Sales")
-st.markdown(
-    """
-    **Which month recorded the highest sales?**  
-    <div class="answer">
-    - <strong>Best sales month:</strong> November  <br>
-    - <strong>Total Sales for this month:</strong> 24,937.34 EGP
-    </div>
-    """, unsafe_allow_html=True)
-
-
-
-# 4. Day with Highest Sales
-st.subheader("4. Day with Highest Sales")
-st.markdown(
-    """
-    **Which day recorded the highest sales?**  
-    <div class="answer">
-    - <strong>Day with highest total sales:</strong> 2024-08-31  <br>
-    - <strong>Total Sales:</strong> 2,855.21 EGP
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# 5. Top Spending Customer
-st.subheader("5. Top Spending Customer")
-st.markdown(
-    """
-    **Which customer spent the most on purchases?**  
-    <div class="answer">
-    - <strong>Customer with highest total sales:</strong> C190  <br>
-    - <strong>Total Amount:</strong> 5,610.98 EGP
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# 6. Most Frequent Buyer
-st.subheader("6. Most Frequent Buyer")
-st.markdown(
-    """
-    **Which customer made the highest number of purchases?**  
-    <div class="answer">
-    - <strong>Customer with the highest number of purchases:</strong> C099  , C190<br>
-    - <strong>Number of Purchases:</strong> 13
-    </div>
-    """, unsafe_allow_html=True)
-
-
-
-# 7. Most Profitable Product
-st.subheader("7. Most Profitable Product")
-st.markdown(
-    """
-    **Which product is the most profitable based on total sales?**  
-    <div class="answer">
-    - <strong>Most profitable product:</strong> Scarf  <br>
-    - <strong>Total Sales:</strong> 5,610.98 EGP
-    </div>
-    """, unsafe_allow_html=True)
-
-
-
-# 8. Least Profitable Product
-st.subheader("8. Least Profitable Product")
-st.markdown(
-    """
-    **Which product is the least profitable based on total sales?**  
-    <div class="answer">
-    - <strong>Least profitable product:</strong> T-Shirt  <br>
-    - <strong>Total Sales:</strong> 73.47 EGP
-    </div>
-    """, unsafe_allow_html=True)
-
-
-
-
-# Question 9: Relationship Between Unit Price and Quantity Sold
-st.subheader("9. Relationship Between Unit Price and Quantity Sold")
-st.markdown(
-    """
-    <div class="answer">
-    There is no relationship between the unit price and quantity sold.
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# Question 10: Regional Sales (Bar Chart)
-st.subheader("10. Sales Distribution by Region")
-st.markdown("**What is the total sales for each region?**")
 st.table({
-    "Region": ["Mansoura", "Alex", "Tanta", "Madinaty", "New Cairo", "Nasr City"],
-    "Total Sales (EGP)": [64890.15, 63305.60, 62583.19, 49515.69, 8845.99, 5549.57]
+    "Year": ["2011", "2012", "2013", "2014"],
+    "Number of Employees Per Year": [3387.8, 3434.9, 3615.0, 3668.4]
 })
+employees_per_year = data.groupby('Year')['EmployeeName'].nunique().reset_index()
+employees_per_year.rename(columns={'EmployeeName': 'EmployeeCount'}, inplace=True)
 
+# Draw the graph
+fig1 = px.bar(employees_per_year,
+    x='Year',
+    y='EmployeeCount',
+    title='Number of employees per year',
+    color='EmployeeCount',
+    color_continuous_scale=px.colors.sequential.RdBu)
 
-# Question 11:How were sales distributed among different categories throughout the year?
-st.subheader("11. How were sales distributed among different categories throughout the year?")
+st.plotly_chart(fig1)
 
-
-# Question 12: Category Contribution (Pie Chart)
-st.subheader("12. Percentage Contribution by Category")
-st.markdown("**What is the percentage contribution of sales by each category?**")
-st.table({
-    "Category": ["Women’s Wear", "Kids’ Wear", "Men’s Wear", "Accessories"],
-    "Percentage": ["27.7%", "27.5%", "24.1%", "20.5%"]
-})
-
-
-# Question 13: Order Values (Bar Chart)
-st.subheader("13. Average Order Value")
-st.markdown(
-    """
-    **What is the average order value (Total Sales)?**  
-    <div class="answer">
-    - <strong>Minimum Sales:</strong> 10.83  <br>
-    - <strong>Average Sales:</strong> 254.69019  <br>
-    - <strong>Maximum Sales:</strong> 798.34
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# 14. Total Quantity Sold per Product
-st.subheader("14. Total Quantity Sold per Product")
-st.markdown("**What is the total quantity sold for each product?**")
-st.table({
-    "Product Name": ["Polo Shirt", "Scarf", "Jeans", "Socks", "Belt", "Gloves", "Jacket", "Hat", "Dress", "Sweater", "Shorts", "Watch", "Shoes", "Boots", "Sandals", "Skirt", "Blazer", "T-Shirt"],
-    "Quantity": [290, 290, 245, 206, 190, 173, 151, 120, 105, 103, 102, 98, 93, 77, 67, 61, 56, 42]
-})
-
-# Recommendations
-st.subheader("19. Recommendations for Improvement")
+# 2. Mean and Median of TotalPay & TotalPayBenefits Per Year
+st.subheader("2. Mean and Median of TotalPay & TotalPayBenefits Per Year")
 st.markdown(
     """
     <div class="answer">
-    Based on the trends and patterns extracted from the data, the following recommendations are suggested:<br>
-    - <strong>Leverage Strengths:</strong> Focus on the high performance of Women’s Wear, especially in regions with high sales.<br>
-    - <strong>Expand Customer Base:</strong> Develop strategies to attract more new customers to balance the overwhelming percentage of repeat buyers.<br>
-    - <strong>Seasonal Strategies:</strong> Optimize inventory and promotional activities during peak sales months (May and November).<br>
-    - <strong>Reevaluate Underperformers:</strong> Consider revising pricing or marketing strategies for products that are underperforming, such as T-Shirts.
+    What are the mean and median of TotalPay and TotalPayBenefits for each year?
     </div>
     """, unsafe_allow_html=True)
+
+st.table({
+    "Year": ["2011", "2012", "2013", "2014"],
+    "TotalPay  ": [71744.103871, 74113.262265, 77611.443142, 75463.918140],
+    "TotalPayBenefits": [71744.103871, 100553.229232, 101440.519714, 100250.918884]
+})
+# Calculate the average for TotalPay and TotalPayBenefits per year
+average_pay_per_year = data.groupby('Year')[['TotalPay', 'TotalPayBenefits']].mean().reset_index()
+
+# Draw a graph using lines to illustrate the comparison
+fig2 = px.line(average_pay_per_year,
+    x='Year',
+    y=['TotalPay', 'TotalPayBenefits'],
+    title='Average TotalPay and TotalPayBenefits per year')
+
+fig2.update_layout(yaxis_title='Average Salary')
+
+st.plotly_chart(fig2)
+
+
+# 3. Highest TotalPayBenefits
+st.subheader("3. Highest TotalPayBenefits")
+st.markdown(
+    """
+    **Who is the employee with the highest TotalPayBenefits, and how much did they receive?**  
+    <div class="answer">
+    \n<strong>Employee:</strong> Employee 37403 
+    \n<strong>TotalPayBenefits:</strong> $1778487.17 
+    </div>
+    """, unsafe_allow_html=True)
+
+category_quantity = data.groupby('EmployeeName')['TotalPayBenefits'].sum()
+max_category = category_quantity.idxmax()
+max_value = category_quantity.max()
+
+# Sort values in descending order and take the top 20
+top_20_employees = category_quantity.sort_values(ascending=False).head(20).reset_index()
+
+# Draw the chart
+fig3 = px.bar(top_20_employees,
+    x='EmployeeName',
+    y='TotalPayBenefits',
+    title='Top 20 Employees by TotalPayBenefits',
+    color='TotalPayBenefits',
+    color_continuous_scale=px.colors.sequential.RdBu)
+
+# Improve the horizontal axis layout if names are long
+fig3.update_layout(xaxis_tickangle=-45)
+
+st.plotly_chart(fig3)
+
+# 4. Most Frequent Job Title
+st.subheader("4. Most Frequent Job Title")
+st.markdown(
+    """
+    **Which job title appears the most frequently?**  
+    <div class="answer">
+    \n<strong>Most common title:</strong> Transit Operator
+    \n<strong>It appears:</strong> 7036 times.
+    </div>
+    """, unsafe_allow_html=True)
+
+# Count the number of occurrences of each job title
+job_title_counts = data['JobTitle'].value_counts().reset_index().head(20)
+job_title_counts.columns = ['JobTitle', 'Frequency']
+
+# Draw the graph
+fig4 = px.bar(job_title_counts,
+    x='JobTitle',
+    y='Frequency',
+    title='Job Title Frequency in Data',
+    color='Frequency',
+    color_continuous_scale=px.colors.sequential.RdBu)
+
+# Improve the horizontal axis layout if names are long
+fig4.update_layout(xaxis_tickangle=-45)
+
+st.plotly_chart(fig4)
+
+# 5. OvertimePay = 0
+st.subheader("5. Employees with Zero OvertimePay")
+st.markdown(
+    """
+    **How many employees received an OvertimePay of 0?**  
+    <div class="answer">
+    \n<strong>Number of employees:</strong> 77,321
+    </div>
+    """, unsafe_allow_html=True)
+
+# 6. Jobs with Salary Over $250,000
+st.subheader("6. Job Titles with Salary Over $250,000")
+st.markdown(
+    """
+    <div class="answer">
+    Are there any job titles with annual earnings above $250,000? If so, which ones?
+    </div> 
+    """, unsafe_allow_html=True)
+
+# Filter employees who earn more than $250,000
+high_salary_jobs = data[data['TotalPayBenefits'] > 250000]
+
+# Calculate the number of employees in each job title
+job_salary_counts = high_salary_jobs['JobTitle'].value_counts().reset_index()
+job_salary_counts.columns = ['JobTitle', 'EmployeeCount']
+st.dataframe(job_salary_counts)
+
+# Calculate the number of employees in each job
+job_salary_counts = high_salary_jobs['JobTitle'].value_counts().reset_index().head(25)
+job_salary_counts.columns = ['JobTitle', 'EmployeeCount']
+
+# Draw the graph
+fig6 = px.bar(job_salary_counts,
+    x='JobTitle',
+    y='EmployeeCount',
+    title='Jobs Paying More Than $250,000 Annually',
+    color='EmployeeCount',
+    color_continuous_scale=px.colors.sequential.RdBu)
+
+# Improve the layout of the horizontal axis if the names are long
+fig6.update_layout(xaxis_tickangle=-45)
+
+st.plotly_chart(fig6)
+
+# 7. Top 10 Jobs by Avg TotalPayBenefits
+st.subheader("7. Top 10 Jobs by Average TotalPayBenefits")
+st.markdown(
+    """
+    <div class="answer">
+        What are the top 10 job titles based on the average TotalPayBenefits? 
+    </div>
+    """, unsafe_allow_html=True)
+category_quantity = data.groupby('JobTitle')['TotalPayBenefits'].sum().head(10)
+max_category = category_quantity.idxmax()
+max_value = category_quantity.max()
+
+top_10_jobs = category_quantity.sort_values(ascending=False).head(10).reset_index()
+top_10_jobs.columns = ['JobTitle', 'TotalPayBenefits']
+
+st.dataframe(top_10_jobs)
+# Draw the graph
+fig7 = px.bar(top_10_jobs,
+    x='JobTitle',
+    y='TotalPayBenefits',
+    title='Top 10 Jobs by Average Salary Total Pay Benefits',
+    color='TotalPayBenefits',
+    color_continuous_scale=px.colors.sequential.RdBu)
+
+st.plotly_chart(fig7)
+
+# 8. Salary Differences Across Years
+st.subheader("8. Salary Differences Across Years")
+st.markdown(
+    """
+    <div class="answer">
+        Is there a noticeable difference in salaries across the years 2011, 2012, 2013, and 2014?
+    </div>
+    """, unsafe_allow_html=True)
+
+# Calculate the average of TotalPay and TotalPayBenefits per year
+average_pay_per_year = data.groupby('Year')['TotalPay'].mean().reset_index()
+
+average_pay_per_year['TotalPay'] = average_pay_per_year['TotalPay'].apply(lambda x: f"{x:,.2f} $")
+st.dataframe(average_pay_per_year)
+
+# Draw a graph using lines to illustrate the comparison
+fig8 = px.line(average_pay_per_year,
+    x='Year',
+    y=['TotalPay'],
+    title='Average TotalPay per year')
+
+fig8.update_layout(yaxis_title='Average Salary')
+
+st.plotly_chart(fig8)
+
+# 9. Police Officer Count & Salary
+st.subheader("9. Police Officers Count and Average Salary")
+st.markdown(
+    """
+    **How many people have the job title "Police Officer"? What is their average salary?**  
+    """, unsafe_allow_html=True)
+# Filter Police Officer who received JobTitle = Police Officer
+officer_1 = data[(data['JobTitle'] == 'POLICE OFFICER I')]
+officer_2 = data[(data['JobTitle'] == 'POLICE OFFICER II')]
+officer_3 = data[(data['JobTitle'] == 'POLICE OFFICER III')]
+
+#Calculate the number of these Police Officer
+count_1 = len(officer_1)
+count_2 = len(officer_2)
+count_3 = len(officer_3)
+
+Police_Officer = count_1 + count_2 + count_3
+
+# Print the result
+st.markdown(
+    """
+    <div class="answer">
+    - How many people have the title Police Officer
+    </div>
+    """, unsafe_allow_html=True)
+data_table = pd.DataFrame({
+    'JobTitle': ['POLICE OFFICER I', 'POLICE OFFICER II', 'POLICE OFFICER III','Total POLICE OFFICER'],
+    'Count POLICE OFFICER': [count_1, count_2, count_3,Police_Officer]
+})
+st.dataframe(data_table)
+
+avg_1 = officer_1['TotalPay'].mean()
+avg_2 = officer_2['TotalPay'].mean()
+avg_3 = officer_3['TotalPay'].mean()
+
+# Merge all salaries from the three ranks
+total_salary_all = pd.concat([officer_1['TotalPay'], officer_2['TotalPay'], officer_3['TotalPay']])
+
+# Calculate the overall mean
+avg_4 = total_salary_all.mean()
+st.markdown(
+    """
+    <div class="answer">
+    -  What is their average salary?
+    </div>
+    """, unsafe_allow_html=True)
+
+salary_table = pd.DataFrame({
+    'JobTitle': ['POLICE OFFICER I', 'POLICE OFFICER II', 'POLICE OFFICER III','Total POLICE OFFICER Salary'],
+    'Avg TotalPay': [f"{avg_1:,.2f} $", f"{avg_2:,.2f} $", f"{avg_3:,.2f} $",f"{avg_4:,.2f} $"]
+})
+st.dataframe(salary_table)
 
 st.divider()
 #Note
